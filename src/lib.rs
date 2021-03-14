@@ -5,5 +5,6 @@ pub mod sensor_models;
 pub mod odometry;
 pub mod datatypes;
 pub mod filters;
+pub mod gaussian;
 
 pub use datatypes::*;
