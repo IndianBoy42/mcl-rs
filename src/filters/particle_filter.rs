@@ -4,10 +4,10 @@ use crate::Pose;
 
 use crate::filters::StateFilter;
 
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ParticleFilter<N: Scalar + RealField> {
+#[derive(Clone, Debug)]
+pub struct ParticleFilter<N: Scalar> {
     pose: Vec<Pose<N>>,
     weights: Vec<N>,
 }
 
-// impl<N: Scalar + RealField> StateFilter<N> for ParticleFilter<N> {}
+// impl<N> StateFilter<N> for ParticleFilter<N> {}

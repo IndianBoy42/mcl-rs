@@ -1,53 +1,74 @@
-use nalgebra::{RealField, Rotation2, Scalar, UnitComplex};
+use std::ops::{Add, Mul};
+
+use nalgebra::{RealField, Rotation2, Scalar, SimdRealField, SimdValue, UnitComplex};
 use num::FromPrimitive;
 
 use crate::Pose;
 
 use super::beam_rangefinder_model::Raycaster;
 
-pub struct CDDT<N: Scalar + RealField> {
+pub struct CDDT<N> {
     inv_angle_res: N,
     inv_y_res: N,
     y_max: N,
     lut: Vec<DDTSlice<N>>,
 }
 
-impl<N: Scalar + RealField + num::FromPrimitive + num::ToPrimitive> Raycaster<N> for CDDT<N> {
+impl<N> Raycaster<N> for CDDT<N>
+where
+    N: Scalar + num::FromPrimitive + num::ToPrimitive + SimdRealField + PartialOrd,
+    <N as SimdValue>::Element: SimdRealField,
+    for<'a> &'a N: Mul<Output = N>,
+{
+    fn build(&mut self, map: crate::MapView<N>) -> Self {
+        self.lut.clear();
+        self.y_max = N::from_usize(map.nrows() / 2).unwrap() / self.inv_y_res;
+        self.lut.reserve(self.theta_size() * self.y_size());
+        todo!()
+    }
+
     fn get(&self, pose: Pose<N>) -> Option<N> {
         let ang = pose.rotation.angle();
         let rot = pose.rotation;
-        let idx = pose.translation * &rot;
-        let yn = ((idx.vector[1] + self.y_max) * self.inv_y_res)
-            .to_usize()
-            .unwrap();
-        let thn = (ang * self.inv_angle_res).round().to_usize().unwrap();
-        let x = idx.vector[0];
+        let idx = rot * pose.translation.vector;
+        // let idx = pose.translation * &rot;
+        let yn = (idx[1] * self.inv_y_res).to_usize().unwrap();
+        let thn = (ang * self.inv_angle_res).to_usize().unwrap();
+        let x = idx[0];
         self.lut.get(thn * self.theta_size() + yn)?.get(x)
-    }
-
-    fn new(map: crate::MapView<N>) -> Self {
-        todo!()
     }
 }
 
-impl<N: Scalar + RealField> CDDT<N> {
-    fn theta_size(&self) -> usize
-    where
-        N: num::FromPrimitive + num::ToPrimitive,
-    {
-        (self.inv_angle_res * N::from_f64(360.0).unwrap())
+impl<N> CDDT<N>
+where
+    N: num::FromPrimitive + num::ToPrimitive + Add<N, Output = N>,
+    for<'a> &'a N: Mul<Output = N>,
+{
+    fn new() -> Self {
+        Self {
+            inv_angle_res: N::from_f64(1.0).unwrap(),
+            inv_y_res: N::from_f64(1.0 / 0.01).unwrap(),
+            y_max: N::from_f64(10.0).unwrap(),
+            lut: Vec::new(),
+        }
+    }
+    fn y_size(&self) -> usize {
+        (&self.inv_y_res * &self.y_max).to_usize().unwrap()
+    }
+    fn theta_size(&self) -> usize {
+        (&self.inv_angle_res * &N::from_f64(360.0).unwrap())
             .to_usize()
             .unwrap()
     }
 }
 
-struct DDTSlice<N: Scalar + RealField> {
+struct DDTSlice<N> {
     zeroes: Vec<N>,
 }
-impl<N: Scalar + RealField> DDTSlice<N> {
+impl<N> DDTSlice<N> {
     pub fn get(&self, x: N) -> Option<N>
     where
-        N: PartialOrd,
+        N: PartialOrd + SimdRealField,
     {
         let res = match self
             .zeroes
@@ -61,5 +82,31 @@ impl<N: Scalar + RealField> DDTSlice<N> {
             }
         };
         Some(res)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    struct No {}
+
+    fn check<N>(cddt: CDDT<N>)
+    where
+        N: Scalar + num::FromPrimitive + num::ToPrimitive + SimdRealField + PartialOrd,
+        <N as SimdValue>::Element: SimdRealField,
+        for<'a> &'a N: Mul<N, Output = N>,
+    {
+    }
+
+    #[test]
+    fn test1() {
+        let a: CDDT<f64>;
+        check(a);
+        let a: CDDT<f32>;
+        check(a);
+        // let a: CDDT<[f32; 4]>;
+        // check(a);
+        // let a: CDDT<No>;
+        // check(a);
     }
 }
