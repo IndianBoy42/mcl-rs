@@ -3,12 +3,12 @@ use nalgebra::{RealField, Scalar};
 use crate::{Pose, PoseCovariance};
 
 pub trait OdometryModel<N: Scalar + RealField> {
-    fn update_all(&self, dt: N, particles: &mut [Pose<N>]) {
-        for particle in particles {
-            *particle = self.update_one(dt, *particle);
+    fn update_all(&self, dt: N, poses: &mut [Pose<N>]) {
+        for pose in poses {
+            *pose = self.update_one(dt, *pose);
         }
     }
-    fn update_one(&self, dt: N, particle: Pose<N>) -> Pose<N>;
+    fn update_one(&self, dt: N, pose: Pose<N>) -> Pose<N>;
 }
 
 pub trait GaussianOdometryModel<N: Scalar + RealField> {
@@ -18,12 +18,12 @@ pub trait GaussianOdometryModel<N: Scalar + RealField> {
 
 pub trait LinearOdometryModel<N: Scalar + RealField> {}
 impl<LOM: LinearOdometryModel<N>, N: Scalar + RealField> OdometryModel<N> for LOM {
-    fn update_one(&self, dt: N, particle: Pose<N>) -> Pose<N> {
-        // self.mean(dt, particle) + randomly_sample_from_gaussian
+    fn update_one(&self, dt: N, pose: Pose<N>) -> Pose<N> {
+        // self.mean(dt, pose) + randomly_sample_from_gaussian
         todo!();
     }
-    fn update_all(&self, dt: N, particles: &mut [Pose<N>]) {
-        // let mean = self.mean(dt, particle);
+    fn update_all(&self, dt: N, poses: &mut [Pose<N>]) {
+        // let mean = self.mean(dt, pose);
         // mean + randomly_sample_alot_from_gaussian
         todo!();
     }
