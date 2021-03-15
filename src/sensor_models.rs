@@ -2,6 +2,9 @@ use nalgebra::{RealField, Scalar};
 
 use crate::Pose;
 
+mod icp;
+mod cddt;
+
 pub mod beam_rangefinder_model;
 pub mod known_landmark_model;
 pub mod likelihood_field_model;
@@ -40,7 +43,6 @@ impl<LSM: LinearSensorModel<F>, F: Scalar + RealField> SensorModel<F> for LSM {
 pub struct UnscentedSensorModel<M> {
     model: M,
 }
-
 // impl<F, M> GaussianSensorModel<F> for UnscentedSensorModel<M>
 // where
 //     F: Scalar + RealField,
