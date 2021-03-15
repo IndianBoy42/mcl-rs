@@ -1,8 +1,9 @@
-use float_ord::FloatOrd;
 use nalgebra::{RealField, Rotation2, Scalar, UnitComplex};
 use num::FromPrimitive;
 
 use crate::Pose;
+
+use super::beam_rangefinder_model::Raycaster;
 
 pub struct CDDT<N: Scalar + RealField> {
     inv_angle_res: N,
@@ -11,22 +12,25 @@ pub struct CDDT<N: Scalar + RealField> {
     lut: Vec<DDTSlice<N>>,
 }
 
-impl<N: Scalar + RealField> CDDT<N> {
-    pub fn get(&self, pose: Pose<N>) -> Option<N>
-    where
-        N: num::FromPrimitive + num::ToPrimitive,
-    {
+impl<N: Scalar + RealField + num::FromPrimitive + num::ToPrimitive> Raycaster<N> for CDDT<N> {
+    fn get(&self, pose: Pose<N>) -> Option<N> {
         let ang = pose.rotation.angle();
-        let rot = UnitComplex::new(ang);
-        let idx = pose * &rot;
-        let yn = ((idx.translation.vector[1] + self.y_max) * self.inv_y_res)
+        let rot = pose.rotation;
+        let idx = pose.translation * &rot;
+        let yn = ((idx.vector[1] + self.y_max) * self.inv_y_res)
             .to_usize()
             .unwrap();
         let thn = (ang * self.inv_angle_res).round().to_usize().unwrap();
-        let x = idx.translation.vector[0];
+        let x = idx.vector[0];
         self.lut.get(thn * self.theta_size() + yn)?.get(x)
     }
 
+    fn new(map: crate::MapView<N>) -> Self {
+        todo!()
+    }
+}
+
+impl<N: Scalar + RealField> CDDT<N> {
     fn theta_size(&self) -> usize
     where
         N: num::FromPrimitive + num::ToPrimitive,
