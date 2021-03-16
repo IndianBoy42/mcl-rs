@@ -1,8 +1,8 @@
-use nalgebra::{RealField, Scalar};
+use nalgebra::{Scalar};
 
 use crate::Pose;
 
-use crate::filters::StateFilter;
+
 
 #[derive(Clone, Debug)]
 pub struct ParticleFilter<N: Scalar> {

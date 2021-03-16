@@ -1,4 +1,4 @@
-use nalgebra::{RealField, Scalar};
+use nalgebra::{Scalar};
 
 use crate::Pose;
 
@@ -32,9 +32,9 @@ pub trait LinearSensorModel<F: Scalar>: GaussianSensorModel<F> {
 }
 impl<LSM: LinearSensorModel<F>, F: Scalar + Copy> SensorModel<F> for LSM {
     fn probability(&self, pos: Pose<F>) -> F {
-        let mean = Self::mean(pos);
-        let cov = Self::covariance(pos);
-        let meas = self.get_measurment();
+        let _mean = Self::mean(pos);
+        let _cov = Self::covariance(pos);
+        let _meas = self.get_measurment();
         // use self.meas
         todo!()
     }

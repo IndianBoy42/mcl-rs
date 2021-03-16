@@ -2,7 +2,7 @@ use num::Float;
 
 use rstar::{primitives::PointWithData, RTree, RTreeNum};
 
-use crate::fmap::{fmap, FMap};
+use crate::fmap::{FMap};
 
 /// Spatial Index for storing data associated with some point in 2-D space.
 ///
@@ -31,7 +31,7 @@ where
         ))
     }
 
-    fn new_index(xres: N, yres: N, x: N, y: N, vec: Vec<((N, N), V)>) -> Self {
+    fn new_index(_xres: N, _yres: N, _x: N, _y: N, _vec: Vec<((N, N), V)>) -> Self {
         todo!()
     }
 }
@@ -40,11 +40,11 @@ impl<N, V> SpatialIndex<N, V> for RTree<PointWithData<V, [N; 2]>>
 where
     N: RTreeNum,
 {
-    fn new_index(xres: N, yres: N, x: N, y: N, vec: Vec<((N, N), V)>) -> Self {
+    fn new_index(_xres: N, _yres: N, _x: N, _y: N, _vec: Vec<((N, N), V)>) -> Self {
         todo!()
     }
 
-    fn query_point(&self, x: N, y: N) -> Option<&V> {
+    fn query_point(&self, _x: N, _y: N) -> Option<&V> {
         todo!()
     }
 }

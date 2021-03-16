@@ -3,9 +3,9 @@ use std::ops::{Add, Mul};
 use nalgebra::{
     DMatrix, Matrix, RealField, Rotation2, Scalar, SimdRealField, SimdValue, UnitComplex,
 };
-use num::{Float, FromPrimitive};
+use num::{FromPrimitive};
 
-use crate::fmap::FMap;
+
 use crate::spatial_index::SpatialIndex;
 use crate::{MapView, Pose};
 
@@ -28,7 +28,7 @@ where
     <N as SimdValue>::Element: SimdRealField,
     for<'a> &'a N: Mul<Output = N>,
 {
-    fn build(grid_res: N, angle_res: N, map: MapView<N>) -> Self {
+    fn build(_grid_res: N, _angle_res: N, _map: MapView<N>) -> Self {
         // inv_y_res = N::one() / grid_res;
         // self.y_size = map.nrows();
         // self.lut.clear();
@@ -72,7 +72,7 @@ impl<N> DDTSlice<N> {
             .binary_search_by(|&test| test.partial_cmp(&x).unwrap())
             // .binary_search_by_key(&FloatOrd(x), |&x| FloatOrd(x))
         {
-            Ok(exact) => N::zero(),
+            Ok(_exact) => N::zero(),
             Err(insertat) => {
                 let &ub = self.zeroes.get(insertat)?;
                 ub - x
@@ -94,11 +94,11 @@ mod vecsi {
     }
 
     impl<N, V> SpatialIndex<N, V> for VecSpatialIndexForCDDT<N, V> {
-        fn new_index(xres: N, yres: N, x: N, y: N, vec: Vec<((N, N), V)>) -> Self {
+        fn new_index(_xres: N, _yres: N, _x: N, _y: N, _vec: Vec<((N, N), V)>) -> Self {
             todo!()
         }
 
-        fn query_point(&self, x: N, y: N) -> Option<&V> {
+        fn query_point(&self, _x: N, _y: N) -> Option<&V> {
             todo!()
         }
     }
@@ -106,7 +106,7 @@ mod vecsi {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    
 
     #[test]
     fn test1() {}

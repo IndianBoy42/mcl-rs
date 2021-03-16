@@ -1,4 +1,4 @@
-use nalgebra::{RealField, Scalar, SimdRealField};
+use nalgebra::{Scalar, SimdRealField};
 
 use crate::odometry::OdometryModel;
 use crate::sensor_models::SensorModel;

@@ -1,4 +1,4 @@
-use nalgebra::{RealField, Scalar};
+use nalgebra::{Scalar};
 
 use crate::{MapView, Pose};
 
