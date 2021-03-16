@@ -1,3 +1,4 @@
+use rstar::AABB;
 use rstar::{primitives::PointWithData, RTree, RTreeNum};
 
 use crate::fmap::FMap;
@@ -5,12 +6,14 @@ use crate::fmap::FMap;
 /// Spatial Index for storing data associated with some point in 2-D space.
 ///
 /// This is not a full spatial index
-pub trait SpatialIndex<K, V> {
+pub trait SpatialIndex<N, V> {
     /// Create a new index data structure
-    fn new_index(xres: K, yres: K, x: K, y: K, vec: Vec<((K, K), V)>) -> Self;
+    fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    where
+        I: IntoIterator<Item = ((N, N), V)>;
     /// Get the related point and its associated data
     /// Should only return a point within (xres, yres) of the query point
-    fn query_point(&self, x: K, y: K) -> Option<&V>;
+    fn query_point(&self, x: N, y: N) -> Option<&V>;
 }
 
 pub struct FMapSpatialIndex<N, V> {
@@ -29,20 +32,48 @@ where
         ))
     }
 
-    fn new_index(_xres: N, _yres: N, _x: N, _y: N, _vec: Vec<((N, N), V)>) -> Self {
+    fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    where
+        I: IntoIterator<Item = ((N, N), V)>,
+    {
         todo!()
     }
 }
 
-impl<N, V> SpatialIndex<N, V> for RTree<PointWithData<V, [N; 2]>>
+pub struct RTreeSpatialIndex<N, V>
 where
-    N: RTreeNum,
+    N: RTreeNum + num::Float,
 {
-    fn new_index(_xres: N, _yres: N, _x: N, _y: N, _vec: Vec<((N, N), V)>) -> Self {
-        todo!()
+    rtree: RTree<PointWithData<V, [N; 2]>>,
+    xres2: N,
+    yres2: N,
+}
+
+impl<N, V> SpatialIndex<N, V> for RTreeSpatialIndex<N, V>
+where
+    N: RTreeNum + num::Float + num::FromPrimitive,
+{
+    fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    where
+        I: IntoIterator<Item = ((N, N), V)>,
+    {
+        let vec = vec
+            .into_iter()
+            .map(|((x, y), v)| PointWithData::new(v, [x, y]))
+            .collect();
+        Self {
+            xres2: xres / N::from_f64(2.0).unwrap(),
+            yres2: yres / N::from_f64(2.0).unwrap(),
+            rtree: RTree::bulk_load(vec),
+        }
     }
 
-    fn query_point(&self, _x: N, _y: N) -> Option<&V> {
+    fn query_point(&self, x: N, y: N) -> Option<&V> {
+        let bbox = AABB::from_corners(
+            [x - self.xres2, y - self.yres2],
+            [x + self.xres2, y + self.yres2],
+        );
+        self.rtree.locate_in_envelope(&bbox);
         todo!()
     }
 }

@@ -1,5 +1,5 @@
-use super::beam_rangefinder_model::Raycaster;
-use crate::spatial_index::SpatialIndex;
+use super::spatial_index::SpatialIndex;
+use super::Raycaster;
 use crate::{MapView, Pose};
 use nalgebra::{Scalar, SimdRealField, SimdValue};
 use std::ops::{Add, Mul};
@@ -74,7 +74,7 @@ impl<N> DDTSlice<N> {
 }
 
 mod vecsi {
-    use crate::spatial_index::SpatialIndex;
+    use crate::sensor_models::utils::spatial_index::SpatialIndex;
 
     /// Makes assumptions on the points involved, making it only suitable for CDDT
     pub struct VecSpatialIndexForCDDT<N, V> {
@@ -85,11 +85,14 @@ mod vecsi {
     }
 
     impl<N, V> SpatialIndex<N, V> for VecSpatialIndexForCDDT<N, V> {
-        fn new_index(_xres: N, _yres: N, _x: N, _y: N, _vec: Vec<((N, N), V)>) -> Self {
+        fn query_point(&self, _x: N, _y: N) -> Option<&V> {
             todo!()
         }
 
-        fn query_point(&self, _x: N, _y: N) -> Option<&V> {
+        fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+        where
+            I: IntoIterator<Item = ((N, N), V)>,
+        {
             todo!()
         }
     }

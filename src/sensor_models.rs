@@ -6,6 +6,8 @@ pub mod beam_rangefinder_model;
 pub mod landmark_model;
 pub mod likelihood_field_model;
 
+mod utils;
+
 pub trait SensorModel<F: Scalar + Copy> {
     fn probability(&self, pos: Pose<F>) -> F;
     fn probability_all(&self, pos: &[Pose<F>]) -> Vec<F> {
