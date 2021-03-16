@@ -78,22 +78,45 @@ mod vecsi {
 
     /// Makes assumptions on the points involved, making it only suitable for CDDT
     pub struct VecSpatialIndexForCDDT<N, V> {
-        inv_xres: N,
-        inv_yres: N,
-        y_max: N,
+        inv_th_res: N,
+        inv_y_res: N,
+        y_size: usize,
         map: Vec<V>,
     }
+    impl<N, V> VecSpatialIndexForCDDT<N, V>
+    where
+        N: num::Float,
+    {
+        fn discretize(&self, th: N, y: N) -> (usize, usize) {
+            let yoffs = y * th.sin();
+            let thn = (th * self.inv_th_res).to_usize().unwrap();
+            let yn = ((y + yoffs) * self.inv_y_res).to_usize().unwrap();
 
-    impl<N, V> SpatialIndex<N, V> for VecSpatialIndexForCDDT<N, V> {
-        fn query_point(&self, _x: N, _y: N) -> Option<&V> {
-            todo!()
+            (thn, yn)
         }
+    }
 
-        fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    impl<N, V> SpatialIndex<N, V> for VecSpatialIndexForCDDT<N, V>
+    where
+        N: num::Float,
+    {
+        #[allow(unreachable_code)]
+        fn new_index<I>(thres: N, yres: N, th: N, y: N, vec: I) -> Self
         where
             I: IntoIterator<Item = ((N, N), V)>,
         {
-            todo!()
+            Self {
+                inv_th_res: N::one() / thres,
+                inv_y_res: N::one() / yres,
+                y_size: (y / yres).to_usize().unwrap(),
+                map: todo!(),
+            }
+        }
+
+        fn query_point(&self, th: N, y: N) -> Option<&V> {
+            let (thn, yn) = self.discretize(th, y);
+            let i = thn * self.y_size + yn;
+            self.map.get(i)
         }
     }
 }
