@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 itertools = "0.10.0"
-# fxhash = "0.2.1"
+fxhash = "0.2.1"
 nalgebra = "0.25.3"
 num = "0.4.0"
 boolinator = "2.4.0"
@@ -17,6 +17,7 @@ rayon = "1.5.0"
 bit-set = "0.5.2"
 simdeez = "1.0.6"
 autodiff = "0.3.0"
+rstar = "0.8.2"
 # rosrust = "0.9.5"
 # rosrust_msg = "0.1.1"
 
