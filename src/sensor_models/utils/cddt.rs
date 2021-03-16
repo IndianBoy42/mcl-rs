@@ -1,18 +1,9 @@
-use std::ops::{Add, Mul};
-
-use nalgebra::{
-    DMatrix, Matrix, RealField, Rotation2, Scalar, SimdRealField, SimdValue, UnitComplex,
-};
-use num::{FromPrimitive};
-
-
+use super::beam_rangefinder_model::Raycaster;
 use crate::spatial_index::SpatialIndex;
 use crate::{MapView, Pose};
-
-use super::beam_rangefinder_model::Raycaster;
-
+use nalgebra::{Scalar, SimdRealField, SimdValue};
+use std::ops::{Add, Mul};
 pub use vecsi::VecSpatialIndexForCDDT;
-
 type DefaultSpatialIndexForCDDT<N> = VecSpatialIndexForCDDT<N, DDTSlice<N>>;
 
 pub struct CDDT<N, SI: SpatialIndex<N, DDTSlice<N>> = DefaultSpatialIndexForCDDT<N>> {
@@ -106,7 +97,6 @@ mod vecsi {
 
 #[cfg(test)]
 mod test {
-    
 
     #[test]
     fn test1() {}

@@ -1,14 +1,10 @@
-use nalgebra::{Scalar};
+use nalgebra::Scalar;
 
 use crate::Pose;
 
-mod cddt;
-mod icp;
-
 pub mod beam_rangefinder_model;
-pub mod known_landmark_model;
+pub mod landmark_model;
 pub mod likelihood_field_model;
-pub mod unknown_landmark_model;
 
 pub trait SensorModel<F: Scalar + Copy> {
     fn probability(&self, pos: Pose<F>) -> F;

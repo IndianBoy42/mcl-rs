@@ -1,8 +1,6 @@
-use num::Float;
-
 use rstar::{primitives::PointWithData, RTree, RTreeNum};
 
-use crate::fmap::{FMap};
+use crate::fmap::FMap;
 
 /// Spatial Index for storing data associated with some point in 2-D space.
 ///
