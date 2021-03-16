@@ -10,5 +10,6 @@ mod datatypes;
 mod fmap;
 mod gaussian;
 mod searcher_util;
+mod collect_vec;
 
 pub use datatypes::*;
