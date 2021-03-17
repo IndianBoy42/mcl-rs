@@ -73,7 +73,6 @@ where
             [x - self.xres2, y - self.yres2],
             [x + self.xres2, y + self.yres2],
         );
-        self.rtree.locate_in_envelope(&bbox);
-        todo!()
+        self.rtree.locate_in_envelope(&bbox).next().map(|v| &v.data)
     }
 }
