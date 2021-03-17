@@ -1,4 +1,4 @@
-use nalgebra::{Scalar};
+use nalgebra::Scalar;
 
 use crate::Pose;
 

@@ -7,8 +7,6 @@ use std::{
 
 use bit_set::BitSet;
 
-
-
 pub trait SearchQueue<T> {
     fn newq() -> Self;
     fn newq_cap(cap: usize) -> Self;
