@@ -78,8 +78,9 @@ where
     C: Raycaster<N>,
 {
     fn build(grid_res: N, angle_res: N, map: GridMapView) -> Self {
-        use crate::datatypes::grid_mapped;
-        map.column_iter()
+        use crate::datatypes::{grid_mapped, grid_occupied};
+        let iter = map
+            .column_iter()
             .enumerate()
             .flat_map(|(x, col)| {
                 col.into_iter()
