@@ -1,5 +1,6 @@
 use std::marker::PhantomData;
 
+use itertools::Itertools;
 use nalgebra::Scalar;
 use rstar::primitives::PointWithData;
 use rstar::{RTree, RTreeNum};
@@ -70,3 +71,34 @@ pub struct LUTRayCaster<N, C>(RTree<PointWithData<N, [N; 3]>>, PhantomData<C>)
 where
     N: Scalar + RTreeNum,
     C: Raycaster<N>;
+
+impl<N, C> Raycaster<N> for LUTRayCaster<N, C>
+where
+    N: Scalar + RTreeNum,
+    C: Raycaster<N>,
+{
+    fn build(grid_res: N, angle_res: N, map: GridMapView) -> Self {
+        use crate::datatypes::grid_mapped;
+        map.column_iter()
+            .enumerate()
+            .flat_map(|(x, col)| {
+                col.into_iter()
+                    .enumerate()
+                    .filter(|&(_, &e)| grid_mapped(e))
+                    .map(move |(y, &e)| ((x, y), e))
+                    .collect_vec()
+            })
+            .map(|((x, y), e)| {
+                if grid_occupied(e) {
+                    return 0;
+                } else {
+                    todo!()
+                }
+            });
+        todo!()
+    }
+
+    fn get(&self, pose: Pose<N>) -> Option<N> {
+        todo!()
+    }
+}
