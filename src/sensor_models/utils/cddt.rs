@@ -1,6 +1,6 @@
+use super::raycast::Raycaster;
 use super::spatial_index::SpatialIndex;
-use super::Raycaster;
-use crate::{MapView, Pose};
+use crate::{GridMapView, Pose};
 use nalgebra::{Scalar, SimdRealField, SimdValue};
 use std::ops::{Add, Mul};
 pub use vecsi::VecSpatialIndexForCDDT;
@@ -19,7 +19,7 @@ where
     <N as SimdValue>::Element: SimdRealField,
     for<'a> &'a N: Mul<Output = N>,
 {
-    fn build(_grid_res: N, _angle_res: N, _map: MapView<N>) -> Self {
+    fn build(_grid_res: N, _angle_res: N, _map: GridMapView) -> Self {
         // inv_y_res = N::one() / grid_res;
         // self.y_size = map.nrows();
         // self.lut.clear();

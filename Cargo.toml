@@ -18,6 +18,8 @@ bit-set = "0.5.2"
 simdeez = "1.0.6"
 autodiff = "0.3.0"
 rstar = "0.8.2"
+rand = "0.8.3"
+rand_distr = "0.4.0"
 # rosrust = "0.9.5"
 # rosrust_msg = "0.1.1"
 
