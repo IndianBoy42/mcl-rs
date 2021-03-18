@@ -1,14 +1,17 @@
 use nalgebra::Scalar;
 
-use crate::Pose;
+use crate::{PointCloud, Pose};
 
 pub mod beam_rangefinder_model;
 pub mod landmark_model;
 pub mod likelihood_field_model;
+pub mod ndt;
 
 mod utils;
 
 pub trait SensorModel<F: Scalar + Copy> {
+    fn new(npts: usize) -> Self;
+    fn build(&mut self, scan: PointCloud<F>);
     fn probability(&self, pos: Pose<F>) -> F;
     fn probability_all(&self, pos: &[Pose<F>]) -> Vec<F> {
         pos.iter().map(|&f| self.probability(f)).collect()
@@ -34,6 +37,18 @@ impl<LSM: LinearSensorModel<F>, F: Scalar + Copy> SensorModel<F> for LSM {
         let _cov = Self::covariance(pos);
         let _meas = self.get_measurment();
         // use self.meas
+        todo!()
+    }
+
+    // fn probability_all(&self, pos: &[Pose<F>]) -> Vec<F> {
+    //     pos.iter().map(|&f| self.probability(f)).collect()
+    // }
+
+    fn build(&mut self, scan: PointCloud<F>) {
+        todo!()
+    }
+
+    fn new(npts: usize) -> Self {
         todo!()
     }
 }

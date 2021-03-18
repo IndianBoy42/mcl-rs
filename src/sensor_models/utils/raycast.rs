@@ -8,7 +8,10 @@ use rstar::{RTree, RTreeNum};
 use crate::{GridMap, GridMapView, Pose};
 
 pub trait Raycaster<N: Scalar> {
-    fn build(grid_res: N, angle_res: N, map: GridMapView) -> Self;
+    fn new() -> Self;
+
+    fn build(&mut self, grid_res: N, angle_res: N, map: GridMapView);
+
     fn get(&self, pose: Pose<N>) -> Option<N>;
 }
 
@@ -46,23 +49,31 @@ pub struct RayMarchingCaster<N: Scalar>(OccupancyGridWrapper<N>);
 pub struct BresenhamsLineCaster<N: Scalar>(OccupancyGridWrapper<N>);
 
 impl<N: Scalar> Raycaster<N> for RayMarchingCaster<N> {
-    fn build(grid_res: N, angle_res: N, map: GridMapView) -> Self {
-        Self(OccupancyGridWrapper::new(grid_res, angle_res, map.into()))
+    fn build(&mut self, grid_res: N, angle_res: N, map: GridMapView) {
+        self.0 = OccupancyGridWrapper::new(grid_res, angle_res, map.into());
     }
 
     fn get(&self, pose: crate::Pose<N>) -> Option<N> {
         let Self(occ) = self;
         todo!()
     }
+
+    fn new() -> Self {
+        todo!()
+    }
 }
 
 impl<N: Scalar> Raycaster<N> for BresenhamsLineCaster<N> {
-    fn build(grid_res: N, angle_res: N, map: GridMapView) -> Self {
-        Self(OccupancyGridWrapper::new(grid_res, angle_res, map.into()))
+    fn build(&mut self, grid_res: N, angle_res: N, map: GridMapView) {
+        self.0 = OccupancyGridWrapper::new(grid_res, angle_res, map.into())
     }
 
     fn get(&self, pose: crate::Pose<N>) -> Option<N> {
         let Self(occ) = self;
+        todo!()
+    }
+
+    fn new() -> Self {
         todo!()
     }
 }
@@ -77,7 +88,7 @@ where
     N: Scalar + RTreeNum,
     C: Raycaster<N>,
 {
-    fn build(grid_res: N, angle_res: N, map: GridMapView) -> Self {
+    fn build(&mut self, grid_res: N, angle_res: N, map: GridMapView) {
         use crate::datatypes::{grid_mapped, grid_occupied};
         let iter = map
             .column_iter()
@@ -100,6 +111,10 @@ where
     }
 
     fn get(&self, pose: Pose<N>) -> Option<N> {
+        todo!()
+    }
+
+    fn new() -> Self {
         todo!()
     }
 }

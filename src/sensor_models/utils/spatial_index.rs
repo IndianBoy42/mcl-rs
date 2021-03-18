@@ -8,9 +8,17 @@ use crate::fmap::FMap;
 /// This is not a full spatial index
 pub trait SpatialIndex<N, V> {
     /// Create a new index data structure
-    fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    fn new<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
     where
         I: IntoIterator<Item = ((N, N), V)>;
+
+    fn build<I>(&mut self, xres: N, yres: N, x: N, y: N, vec: I)
+    where
+        I: IntoIterator<Item = ((N, N), V)>,
+        Self: Sized,
+    {
+        *self = Self::new(xres, yres, x, y, vec);
+    }
     /// Get the related point and its associated data
     /// Should only return a point within (xres, yres) of the query point
     fn query_point(&self, x: N, y: N) -> Option<&V>;
@@ -32,7 +40,14 @@ where
         ))
     }
 
-    fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    fn new<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    where
+        I: IntoIterator<Item = ((N, N), V)>,
+    {
+        todo!()
+    }
+
+    fn build<I>(&mut self, xres: N, yres: N, x: N, y: N, vec: I)
     where
         I: IntoIterator<Item = ((N, N), V)>,
     {
@@ -53,7 +68,7 @@ impl<N, V> SpatialIndex<N, V> for RTreeSpatialIndex<N, V>
 where
     N: RTreeNum + num::Float + num::FromPrimitive,
 {
-    fn new_index<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
+    fn new<I>(xres: N, yres: N, x: N, y: N, vec: I) -> Self
     where
         I: IntoIterator<Item = ((N, N), V)>,
     {

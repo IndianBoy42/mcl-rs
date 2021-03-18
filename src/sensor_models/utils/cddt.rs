@@ -19,7 +19,7 @@ where
     <N as SimdValue>::Element: SimdRealField,
     for<'a> &'a N: Mul<Output = N>,
 {
-    fn build(_grid_res: N, _angle_res: N, _map: GridMapView) -> Self {
+    fn build(&mut self, _grid_res: N, _angle_res: N, _map: GridMapView) {
         // inv_y_res = N::one() / grid_res;
         // self.y_size = map.nrows();
         // self.lut.clear();
@@ -35,6 +35,10 @@ where
         self.lut.query_point(ang, idx.y)?.get(idx.x)
         // let yn = (idx.y * self.inv_y_res).to_usize().unwrap();
         // let thn = (ang * self.inv_angle_res).to_usize().unwrap();
+    }
+
+    fn new() -> Self {
+        todo!()
     }
 }
 
@@ -101,7 +105,7 @@ mod vecsi {
         N: num::Float,
     {
         #[allow(unreachable_code)]
-        fn new_index<I>(thres: N, yres: N, th: N, y: N, vec: I) -> Self
+        fn new<I>(thres: N, yres: N, th: N, y: N, vec: I) -> Self
         where
             I: IntoIterator<Item = ((N, N), V)>,
         {
@@ -117,6 +121,13 @@ mod vecsi {
             let (thn, yn) = self.discretize(th, y);
             let i = thn * self.y_size + yn;
             self.map.get(i)
+        }
+
+        fn build<I>(&mut self, xres: N, yres: N, x: N, y: N, vec: I)
+        where
+            I: IntoIterator<Item = ((N, N), V)>,
+        {
+            todo!()
         }
     }
 }
