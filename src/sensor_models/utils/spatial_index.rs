@@ -1,7 +1,7 @@
 use rstar::AABB;
 use rstar::{primitives::PointWithData, RTree, RTreeNum};
 
-use crate::fmap::FMap;
+use crate::utils::fmap::FMap;
 
 /// Spatial Index for storing data associated with some point in 2-D space.
 ///

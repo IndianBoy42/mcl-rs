@@ -6,10 +6,13 @@ pub mod filters;
 pub mod odometry;
 pub mod sensor_models;
 
-mod collect_vec;
 mod datatypes;
-mod fmap;
-mod gaussian;
-mod searcher_util;
+
+mod utils {
+    pub mod collect_vec;
+    pub mod fmap;
+    pub mod gaussian;
+    pub mod searcher_util;
+}
 
 pub use datatypes::*;

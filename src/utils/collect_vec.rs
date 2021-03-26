@@ -1,4 +1,4 @@
-use crate::fmap::{fmap, FMap};
+use crate::utils::fmap::{fmap, FMap};
 use std::hash::Hash;
 
 pub trait CollectVecCapacity<T> {
