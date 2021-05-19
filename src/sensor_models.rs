@@ -6,6 +6,7 @@ pub mod beam_rangefinder_model;
 pub mod landmark_model;
 pub mod likelihood_field_model;
 pub mod ndt;
+pub mod scan_matching;
 
 mod utils;
 

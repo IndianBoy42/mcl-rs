@@ -1,4 +1,5 @@
 #![feature(trait_alias)]
+#![feature(extended_key_value_attributes)]
 #![feature(type_alias_impl_trait)]
 #![allow(dead_code)]
 
@@ -16,3 +17,5 @@ mod utils {
 }
 
 pub use datatypes::*;
+
+pub mod notes;

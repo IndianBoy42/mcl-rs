@@ -17,3 +17,6 @@ Mostly a learning experience for me
 
  - CDDT: Fast Approximate 2D Ray Casting for Accelerated Localization
    - github RangeLibc for example implementation
+
+ - Particle Filters in Action at UW-RSE lab
+   - https://rse-lab.cs.washington.edu/projects/mcl/
