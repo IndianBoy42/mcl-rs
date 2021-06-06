@@ -8,12 +8,15 @@ pub type PointCovariance<F> = nalgebra::base::Matrix2<F>;
 const GRID_OCCU: i8 = 1;
 const GRID_FREE: i8 = -1;
 const GRID_NONE: i8 = 0;
+#[inline(always)]
 pub const fn grid_occupied(x: i8) -> bool {
     x > GRID_NONE
 }
+#[inline(always)]
 pub const fn grid_mapped(x: i8) -> bool {
     x != GRID_NONE
 }
+#[inline(always)]
 pub const fn grid_freecell(x: i8) -> bool {
     x < GRID_NONE
 }
